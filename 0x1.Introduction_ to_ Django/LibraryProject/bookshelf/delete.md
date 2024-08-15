@@ -1,13 +1,17 @@
-# Python command to delete the book
- ```python
+# Delete the Book Instance
 
-from bookshelf.model import Book
+```python
+from bookshelf.models import Book
 
- # delete the book created
-retrieved_book.delete()
+# Retrieve the book you created
+book = Book.objects.get(id=1)
 
-#confirm deletion
+# Delete the book instance
+book.delete()
+
+# Try to retrieve all books again to confirm deletion
 books = Book.objects.all()
 print(books)
- 
-#Expected Output
+
+# Expected Output
+[]
