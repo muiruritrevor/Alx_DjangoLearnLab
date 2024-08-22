@@ -1,4 +1,4 @@
-from django.shortcuts import render
+# relationship_app/views.py
 from django.contrib.auth import login as auth_login
 from django.contrib.auth import logout as auth_logout
 from django.contrib.auth.decorators import permission_required
@@ -149,6 +149,4 @@ class LibraryDetailView(DetailView):
     model = Library
     template_name = 'relationship_app/library_detail.html'
     context_object_name = 'library'
-
-
 # Create your views here.
