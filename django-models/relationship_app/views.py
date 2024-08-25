@@ -1,15 +1,12 @@
-# relationship_app/views.py
 from django.contrib.auth import login as auth_login
 from django.contrib.auth import logout as auth_logout
 from django.contrib.auth.decorators import permission_required
 from django.contrib.auth.decorators import user_passes_test
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.forms import UserCreationForm
-# relationship_app/views.py
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
 from django.views.generic.detail import DetailView
-
 from .forms import BookForm
 from .models import Book
 from .models import Library
@@ -139,7 +136,7 @@ class RegisterView(View):
             return redirect('login')
         return render(request, 'relationship_app/register.html', {'form': form})
 
-
+# function based view that lists all books store in the database
 def list_books(request):
     books = Book.objects.all()
     return render(request, 'relationship_app/list_books.html', {'books': books})
