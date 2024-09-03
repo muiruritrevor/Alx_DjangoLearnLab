@@ -1,4 +1,4 @@
-from rest_framework import generics
+from rest_framework import generics, viewsets
 from .serializers import BookSerializer
 from .models import Book
 
@@ -17,6 +17,11 @@ class BookList(generics.ListAPIView):
 #     serializer = BookSerializer(books, many = True)
 #     return Response(serializer.data)
 
+
+class BookViewSet(viewsets.ModelViewSet):
+    queryset = Book.objects.all()
+    serializer_class = BookSerializer
+    #Permissions_class = ([])
 
 
 # from django.shortcuts import render
