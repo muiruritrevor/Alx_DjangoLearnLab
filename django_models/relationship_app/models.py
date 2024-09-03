@@ -26,7 +26,7 @@ post_save.connect(create_user_profile, sender=User)
 
 
 class Author(models.Model):
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100, default='Unknown Author')
 
     def __str__(self):
         return self.name

@@ -1,19 +1,15 @@
-from django.contrib.auth import login as auth_login
-from django.contrib.auth import logout as auth_logout
-from django.contrib.auth.decorators import permission_required
-from django.contrib.auth.decorators import user_passes_test
-from django.contrib.auth.forms import AuthenticationForm
-from django.contrib.auth.forms import UserCreationForm
-# relationship_app/views.py
+from django.contrib.auth import login as auth_login, logout as auth_logout, authenticate
+from django.contrib.auth.decorators import permission_required, user_passes_test
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
+from django.contrib.auth.views import LoginView as AuthLoginView, LogoutView as AuthLogoutView
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
 from django.views.generic.detail import DetailView
 
 from .forms import BookForm
-from .models import Book
-from .models import Library
+from .models import Book, Library
 
-
+# Book views
 @permission_required('relationship_app.can_add_book', raise_exception=True)
 def add_book(request):
     if request.method == 'POST':
@@ -93,57 +89,28 @@ class RegisterView(View):
             password = form.cleaned_data.get('password1')
             user = authenticate(username=username, password=password)
             if user is not None:
-                login(request, user)
-            return redirect('login')
+                auth_login(request, user)
+            return redirect('home')
         return render(request, 'relationship_app/register.html', {'form': form})
 
 
-# Custom LoginView
-class LoginView(View):
-    def get(self, request):
-        form = AuthenticationForm()
-        return render(request, 'relationship_app/login.html', {'form': form})
-
-    def post(self, request):
-        form = AuthenticationForm(request, data=request.POST)
-        if form.is_valid():
-            user = form.get_user()
-            auth_login(request, user)
-            return redirect('home')  # Redirect to a home page or dashboard
-        return render(request, 'relationship_app/login.html', {'form': form})
+# Login View using Django's built-in LoginView
+class LoginView(AuthLoginView):
+    template_name = 'relationship_app/login.html'
 
 
-# Custom LogoutView
-class LogoutView(View):
-    def get(self, request):
-        auth_logout(request)
-        return redirect('login')  # Redirect to login page after logout
+# Logout View using Django's built-in LogoutView
+class LogoutView(AuthLogoutView):
+    next_page = 'login'
 
 
-# RegisterView remains the same
-class RegisterView(View):
-    def get(self, request):
-        form = UserCreationForm()
-        return render(request, 'relationship_app/register.html', {'form': form})
-
-    def post(self, request):
-        form = UserCreationForm(request.POST)
-        if form.is_valid():
-            user = form.save()
-            username = form.cleaned_data.get('username')
-            password = form.cleaned_data.get('password1')
-            user = authenticate(username=username, password=password)
-            if user is not None:
-                login(request, user)
-            return redirect('login')
-        return render(request, 'relationship_app/register.html', {'form': form})
-
-
+# List Books View
 def list_books(request):
     books = Book.objects.all()
     return render(request, 'relationship_app/list_books.html', {'books': books})
 
 
+# Library Detail View
 class LibraryDetailView(DetailView):
     model = Library
     template_name = 'relationship_app/library_detail.html'
