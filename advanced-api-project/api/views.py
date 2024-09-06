@@ -1,18 +1,24 @@
 from django.shortcuts import render
-from rest_framework import generics, permissions
-from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
+from rest_framework import generics, permissions, filters
+from rest_framework.permissions import IsAuthenticated
 from .models import Author, Book
 from .seriealizers import AuthorSerializer, BookSerializer
+from django_filters.rest_framework import DjangoFilterBackend
+
 
 class BookListView(generics.ListAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [permissions.IsAuthenticated]
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter,filters.OrderingFilter] # specify which filtering, searching and ordering
+    filterset_fields = ['title', 'auhtor', 'publicatiion_year'] # defines which fields to be used for filtering
+    search_fields = ['title', 'auhtor'] # specify which fields can be searched
+    odering_fields= ['title', 'auhtor'] # determines which fields can be used for odering
 
 class BookDetailView(generics.RetrieveAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [permissions.IsAuthenticated]
 
 class BookCreateView(generics.CreateAPIView):
     queryset = Book.objects.all()
