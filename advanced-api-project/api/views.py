@@ -13,7 +13,7 @@ class BookListView(generics.ListAPIView):
     permission_classes = [permissions.IsAuthenticated]
     filter_backends = [DjangoFilterBackend, filters.SearchFilter,filters.OrderingFilter] # specify which filtering, searching and ordering
     filterset_fields = ['title', 'auhtor', 'publicatiion_year'] # defines which fields to be used for filtering
-    search_fields = ['title', 'auhtor'] # specify which fields can be searched
+    search_fields = ['author', 'publication_year'] # specify which fields can be searched
     odering_fields= ['title', 'auhtor'] # determines which fields can be used for odering
 
 class BookDetailView(generics.RetrieveAPIView):
