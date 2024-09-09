@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django_filters import rest_framework
 from rest_framework import generics, permissions, filters
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 from .models import Author, Book
 from .seriealizers import AuthorSerializer, BookSerializer
 from django_filters.rest_framework import DjangoFilterBackend
