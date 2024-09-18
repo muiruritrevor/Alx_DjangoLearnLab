@@ -1,0 +1,58 @@
+{% extends "blog/base.html" %}
+
+{% block content %}
+<style>
+    body {
+        font-family: "Roboto", sans-serif;
+        font-size: 18px;
+        background-color: #fdfdfd;
+    }
+
+    .masthead {
+        background: #3398E1;
+        padding: 60px 0;
+        color: white;
+        text-align: center;
+    }
+
+    .card {
+        box-shadow: 0 16px 48px rgba(0, 0, 0, 0.1);
+        margin-bottom: 30px;
+    }
+
+    .card-title {
+        font-size: 24px;
+        margin-bottom: 10px;
+    }
+
+    .card-text {
+        color: #555;
+    }
+</style>
+
+<header class="masthead">
+    <div class="container">
+        <h1 class="site-heading my-4">Welcome to My Awesome Blog</h1>
+        <p>We Love Django As Much As You Do!</p>
+    </div>
+</header>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12 mt-3">
+            {% for post in post_list %}
+            <div class="card">
+                <div class="card-body">
+                    <h2 class="card-title">{{ post.title }}</h2>
+                    <p class="card-text text-muted h6">{{ post.author }} | {{ post.created_on }}</p>
+                    <p class="card-text">{{ post.content|slice:":200" }}...</p>
+                    <a href="{% url 'post_detail' post.slug %}" class="btn btn-primary">Read More &rarr;</a>
+                </div>
+            </div>
+            {% empty %}
+            <p>No blog posts available at the moment.</p>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}
