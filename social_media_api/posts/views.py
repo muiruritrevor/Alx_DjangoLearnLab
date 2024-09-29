@@ -45,7 +45,7 @@ def unlike_post(request, pk):
 
 
 class PostViewSet(viewsets.ModelViewSet):
-    queryset = Post.objects.filter(author__in=following_users).order_by
+    queryset = Post.objects.all()
     serializer_class = PostSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
