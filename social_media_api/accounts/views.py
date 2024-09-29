@@ -22,24 +22,18 @@ class IsAuthorOrReadOnly(permissions.BasePermission):
         # Write permissions are only allowed to the author of the post/comment
         return obj.author == request.user
 
-    
 
 # Post view
 class PostView(viewsets.ModelViewSet):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsAuthorOrReadOnly]
-    
-    filter_backends = [rest_framework.DjangoFilterBackend, filters.SearchFilter]
-    filterset_fields = ['title']
-    search_fields = ['title', 'content']
     pagination_class = PageNumberPagination
 
-
     def perform_create(self, serializer):
-        serializer.save(author=self.request.user)
-
-
+        post = serializer.save(author=self.request.user)
+        post.save()
+        
 
 # Comment view
 class CommentView(viewsets.ModelViewSet):
